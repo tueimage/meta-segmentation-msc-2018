@@ -2,6 +2,33 @@
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
 
+### Date: 27-11-2018
+
+#### What did you achieve?
+
+* Better understanding of the concept of meta learning
+* Initial iterature review
+* Start of research proposal 
+
+#### What did you struggle with?
+
+* It is is hard to find a specific challenge/topic for my project
+* Had to finalize work at CytoSMART, had my internship presentation and had a symposium this week which limited my time a bit
+
+#### What would you like to work on next week?
+
+* More extensive/directed literature review
+* Write research proposal
+
+#### Where do you need help from Veronika?
+
+* Ideas for interesting challenges in meta learning that fit with the current research in the imaging group
+* format of the research propsoal 
+
+#### Any other topics
+
+*
+
 ## Template
 ### Date: 24-09-2018
 
