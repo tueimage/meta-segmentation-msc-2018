@@ -1,6 +1,27 @@
 # Weekly meetings
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+### Date: 4-12-2018
+
+#### What did you achieve?
+
+*	Expanded literature review
+*	Plan of approach
+ 
+
+#### What did you struggle with?
+
+* Determining how much time the first step/first prototype will take
+
+#### What would you like to work on next week?
+
+* Get started with first step/prototype
+*	Set up the lab computer (hopefully)
+
+
+#### Where do you need help from Veronika?
+
+* How do I choose the semantic segmentation models? And what if one segmentation model just outperforms all other models for every dataset? 
 
 ### Date: 27-11-2018
 
