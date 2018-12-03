@@ -7,7 +7,9 @@ When a new medical imaging problem is given the whole process of designing a sui
 * research question / approach to a solution
 
 Don’t know the exact format that is wanted for the research question. Is it supposed to be something like this?
+
 “How can meta learning determine which deep learning approach on medical image datasets is optimal?”
+
 The Decathlon dataset has binary segmention maps. Therefore the first part of this project will be to create a meta learning model to determine the best semantic segmentation method for a given problem, using the data from the Decathlon Challenge. 
 
 *	what a first prototype might be
