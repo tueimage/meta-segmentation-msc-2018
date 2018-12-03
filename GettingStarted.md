@@ -1,5 +1,17 @@
 # First week of your thesis project
 
+•	description of problem
+When a new medical imaging problem is given the whole process of designing a suitable neural network is done from the ground up (choosing the correct algorithm, training the model, etc.). However with previous knowledge of already solved medical imaging problems it should be possible to predict the most suitable solution, and potentially also utilizing pre-trained versions of this solution. 
+•	research question / approach to a solution
+Don’t know the exact format that is wanted for the research question. Is it supposed to be something like this?
+“How can meta learning determine which deep learning approach on medical image datasets is optimal?”
+The Decathlon dataset has binary segmention maps. Therefore the first part of this project will be to create a meta learning model to determine the best semantic segmentation method for a given problem, using the data from the Decathlon Challenge. 
+•	what a first prototype might be
+Meta-learning model that outputs a binary prediction. I will select two top performing encoder-decoder networks for semantic segmentation. Both networks should share the encoder and differ with the decoder, to limit the amount a variables in this stage of the project. Performance of both modes on the decathlon data will be measured. Then a meta learning model will be trained to determine which decoder network works best on which dataset. Cross-validation will be used. 
+•	rough schedule
+Depending on when computer is available. Hope to have first prototype ready in two weeks. Depending on the challenges I find in that process I will shape the further planning. 
+
+
 ## Problem definition
 
 Create an initial problem definition that captures your understanding of the thesis’ goals.
