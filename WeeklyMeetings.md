@@ -1,6 +1,29 @@
 # Weekly meetings
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+### Date: 11-12-2018
+
+#### What did you achieve?
+
+*	Read the given papers from last weeks meeting 
+*	implemented Unet and started training all datasets on it 
+* first outline of the meta learning method
+
+#### What did you struggle with?
+
+* whether I should do a 3D image segmentation or view the image as a collection of seperate 2d slices
+* was ill for 4 days this week so wasnt able to achieve all my goals
+
+#### What would you like to work on next week?
+
+* Obtaining Unet results on all datasets
+* further design of meta learning approach. 
+
+#### Where do you need help from Veronika?
+
+* I chose to use a 2D unet instead of a 3D unet. Do you think this is a good decision?
+
+
 ### Date: 4-12-2018
 
 #### What did you achieve?
