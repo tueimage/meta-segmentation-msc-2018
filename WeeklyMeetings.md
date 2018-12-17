@@ -1,6 +1,28 @@
 # Weekly meetings
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+### Date: 18-12-2018
+
+#### What did you achieve?
+
+*	implemented Unet and started training all datasets on it 
+* interpreted first results ('decathlon/december/results_december.csv'
+* uploaded literature list and todo list to github (will be done before the meeting) 
+
+#### What did you struggle with?
+
+* running time
+* what if the unet with a set of hyperparameters works on 8/10 datasets? is that acceptable?
+
+#### What would you like to work on next week?
+
+* work on meta learning approach
+* monitoring unet training
+
+#### Where do you need help from Veronika?
+
+* no.2 of "what did you struggle with"
+
 ### Date: 11-12-2018
 
 #### What did you achieve?
