@@ -7,6 +7,6 @@ Prostate,works fine,200,0.6956,works great,200,0.4863,384,32
 Lung,Not working properly ,137,0.0234,tbd,_ ,_,512,64
 Pancreas,tbd,_ ,_,tbd,_,_,512,282
 HepaticVessel,Not working properly ,34,0.0373,tbd,_, _,512,303
-Spleen,Probably works, training not that far though,6,0.0346,tbd,_,_,512,41
+Spleen,Probably works but training not that far though,6,0.0346,tbd,_,_,512,41
 Colon,works fine,75,0.5137,tbd,_ ,_,512,126
 
