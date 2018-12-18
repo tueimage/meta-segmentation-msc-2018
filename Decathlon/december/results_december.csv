@@ -1,12 +1,12 @@
-Task,Adam,epoch x/200,Adam Dice,RMSProp,epoch x/200,RMSProp dice,ImageSize,TrainSize
-BrainTumour,works great,91,0.6553,tbd,_ ,_,240,484
+Task,Adam,epoch x/200,Adam Dice (val loss),RMSProp,epoch x/200,RMSProp dice,ImageSize,TrainSize
+BrainTumour,works great,132,0.75012,tbd,_ ,_,240,484
 Heart,works okay,200,0.4821,doesnt work,200,0.01763,320,20
-Liver,works great,71,0.6401,tbd,_ ,_,512,131
+Liver,works great,75,0.6405,tbd,_ ,_,512,131
 Hippocampus,works fine but sudden drop,200,0.4814,works badly,200,0.1819,64,263
 Prostate,works fine,200,0.6956,works great,200,0.4863,384,32
-Lung,Not working properly ,137,0.0234,tbd,_ ,_,512,64
-Pancreas,tbd,_ ,_,tbd,_,_,512,282
+Lung,Not working properly ,200,0.0234,tbd,_ ,_,512,64
+Pancreas,probably not working,16 ,0.02343,tbd,_,_,512,282
 HepaticVessel,Not working properly ,34,0.0373,tbd,_, _,512,303
-Spleen,Probably works but training not that far though,6,0.0346,tbd,_,_,512,41
-Colon,works fine,75,0.5137,tbd,_ ,_,512,126
+Spleen, works perfect,75,0.89765,tbd,_,_,512,41
+Colon,works fine,109,0.5137,tbd,_ ,_,512,126
 
