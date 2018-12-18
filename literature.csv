@@ -16,8 +16,6 @@ nnUnet: Self-adapting Framework for U-net-Based Medical Image Segmentation,https
 
 Meta-Learning by Landmarking Various Learning Algorithms,https://www.researchgate.net/profile/Bernhard_Pfahringer/publication/221345088_Meta-Learning_by_Landmarking_Various_Learning_Algorithms/links/0c96052af5db474896000000/Meta-Learning-by-Landmarking-Various-Learning-Algorithms.pdf,2000,B Pfahringer 
 
-Some meta-learning articles on Medium,https://medium.com/@mcgrocedata/meta-learning-learning-to-learn-5ccb5de6b7e6,2018, 
-
 Undoing the Damage of Dataset Bias,http://undoingbias.csail.mit.edu/,2012,A Khosla 
 
 Ranking Learning Algorithms: Using IBL and Meta-Learning on Accuracy and Time Results,https://link.springer.com/article/10.1023/A:1021713901879,2003,P B Brazdil 
@@ -29,6 +27,8 @@ One Model To Learn Them All,https://arxiv.org/abs/1706.05137,2017,L Kaiser
 Do CIFAR-10 Classifiers Generalize to CIFAR-10?,https://arxiv.org/abs/1806.00451,2018,B Rechk 
 
 Meta-learning from an experiment database,https://core.ac.uk/download/pdf/34534065.pdf,2012,K Driessens 
+
+Some meta-learning articles on Medium,https://medium.com/@mcgrocedata/meta-learning-learning-to-learn-5ccb5de6b7e6,2018,
 
 """""",https://medium.com/@jonathan_hui/meta-learning-how-we-address-the-shortcomings-of-our-deep-networks-a008aa4b5b2b,, 
 
