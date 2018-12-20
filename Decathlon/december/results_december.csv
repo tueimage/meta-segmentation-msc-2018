@@ -1,12 +1,12 @@
 Task,Adam,epoch x/200,Adam Dice (val loss),RMSProp,epoch x/200,RMSProp dice,ImageSize,TrainSize, mean voxel segmentation size (k), std voxel segmentation size (k)
-BrainTumour,works great,132,0.75012,tbd,_ ,_,240,484,103,59
+BrainTumour,works great,200,0.80012,less than adam,11 ,0.08259,240,484,103,59
 Heart,works okay,200,0.4821,doesnt work,200,0.01763,320,20,47,10
-Liver,works great,75,0.6405,tbd,_ ,_,512,131,2681,1590
+Liver,works great,75,0.6405,works okay,62 ,0.28,512,131,2681,1590
 Hippocampus,works fine but sudden drop,200,0.4814,works badly,200,0.1819,64,263,3,0.4
 Prostate,works fine,200,0.6956,works great,200,0.4863,384,32,51,39
-Lung,Not working properly ,200,0.0234,tbd,_ ,_,512,64,28,54
-Pancreas,probably not working,16 ,0.02343,tbd,_,_,512,282,54,41
+Lung,Not working properly ,200,0.0234,also bad,120 ,0.0008,512,64,28,54
+Pancreas,probably not working,16 ,0.02343,not working,_,_,512,282,54,41
 HepaticVessel,Not working properly ,34,0.0373,tbd,_, _,512,303,78,133
-Spleen, works perfect,75,0.89765,tbd,_,_,512,41,102,84
-Colon,works fine,109,0.5137,tbd,_ ,_,512,126,14,20
+Spleen, works perfect,75,0.95858,not yet great,30,0.05461,512,41,102,84
+Colon,works fine,200,0.5137,reasonable,63,0.28,512,126,14,20
 
