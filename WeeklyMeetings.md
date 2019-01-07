@@ -1,6 +1,31 @@
 # Weekly meetings
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+
+### Date: 8-01-2019
+
+#### What did you achieve?
+
+*	analyzed the first try on meta learning with the decathlon datatset
+* made a research proposal based on this first result
+
+#### What did you struggle with?
+
+* how to take the right conclusions from the work with the decathlon dataset
+* how to asses whether a long term goal is attainable for my master project
+
+#### What would you like to work on next week?
+
+* adjust the research proposal based on the feedback from our meeting
+* start with the first steps of the research proposal
+ 
+
+#### Where do you need help from Veronika?
+
+* Feedback on the research prososal. I dont have it finished now unfortunately. I will post it on the main page of this github tomorrow before 11AM. If more convenient I can finish it a bit earlier. 
+
+
+
 ### Date: 18-12-2018
 
 #### What did you achieve?
