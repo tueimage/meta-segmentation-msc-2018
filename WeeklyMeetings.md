@@ -2,6 +2,28 @@
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
 
+### Date: 15-01-2019
+
+#### What did you achieve?
+
+*	Identified suitable pre-trained feature extraction models
+* Built decoder network on top of pre-trained VGG16 model
+
+#### What did you struggle with?
+
+* It is not entirely clear if it is smart to fine-tune a pretrained network with the new data (especially for this project)
+* I found a lot of good feature extractors, but I am not sure of a slection criteria
+
+#### What would you like to work on next week?
+
+* write a clear research proposal
+ 
+
+#### Where do you need help from Veronika?
+
+* To what extent do I need to finetune the pretrained networks and the new decoder part of the network?
+* how many feature extractors to comnpare? 
+
 ### Date: 8-01-2019
 
 #### What did you achieve?
