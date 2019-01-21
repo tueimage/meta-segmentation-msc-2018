@@ -1,6 +1,27 @@
 # Weekly meetings
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+### Date: 22-01-2019
+
+#### What did you achieve?
+
+* Trained all of the 10 subsets of the decathlon dataset on VGG16, ResNet50 and MobileNet based encoder-decoder networks. 
+*	Built framework to insert new pre trained networks easy
+* Wrote research proposal: https://www.overleaf.com/project/5c41a08b922a6a4652a90d7c
+
+
+#### What did you struggle with?
+
+* I wasnt able to set a goal for the end of my internship. The current research proposal is probably one or two months of work, but I think I can only know what comes next once I am a bit further in my research 
+
+#### What would you like to work on next week?
+
+* Identifying the meta-features that are useful to me 
+
+#### Where do you need help from Veronika?
+
+* Feedback on research proposal 
+* How can I set long term goals for this project?
 
 ### Date: 15-01-2019
 
