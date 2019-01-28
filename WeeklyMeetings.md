@@ -1,6 +1,27 @@
 # Weekly meetings
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+### Date: 28-01-2019
+
+#### What did you achieve?
+
+* Did a more directed literature review into meta feature selection 
+*	Background research in visualisation and statistical analysis of results
+
+#### What did you struggle with?
+
+* Making the distinction between relevant and less relevant literature
+
+#### What would you like to work on next week?
+
+* Finalizing literature review
+* obtaining the needed training data for the meta learning model
+
+#### Where do you need help from Veronika?
+
+* Check whether proposed method for meta learning is viable
+
+
 ### Date: 22-01-2019
 
 #### What did you achieve?
