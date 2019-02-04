@@ -1,6 +1,29 @@
 # Weekly meetings
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+### Date: 05-02-2019
+
+#### What did you achieve?
+
+* implement meta learning framework we discussed last week (results probably next week)
+* Defined the meta learning model more precise
+* Background reading on data visualisation 
+
+#### What did you struggle with?
+
+* In my meta learning approach I want to make predictions on datasets, not single images. 
+
+#### What would you like to work on next week?
+
+* Obtaining and analyzing results of meta learning method
+* If results are meaningful: outline next step in approach
+
+#### Where do you need help from Veronika?
+
+* Some feedback on the meta learing part of the method (which I now defined in more detail) 
+* Get feedback on the project so far; how can I improve myself? 
+
+
 ### Date: 28-01-2019
 
 #### What did you achieve?
