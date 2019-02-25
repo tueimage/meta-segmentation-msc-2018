@@ -5,6 +5,29 @@ Copy/paste and fill in the template below each week, BEFORE coming to the weekly
 
 #### What did you achieve?
 
+* analyzed (lack of) results of meta learning approach. results were a bit dissapointing, but it could be expected because I doubted the quality of the meta labels, which  originated from models that I trained myself. (only 3 models and trained for short time)
+* Started changing the method metnioned above to fit the decathlon results as meta_labels. 
+* discussed participation in Chaos challenge and implemented one algorithm (Unet-ConvLSTM) 
+* Background reading on meta learning and data analysis
+
+#### What did you struggle with?
+
+* My previous meta learning method (in which I trained models to create the meta-labels) didnt work. This problem could be smaller when using the decathlon results. However I wanted to know for sure that this idea could indeed work. I might have spent too much time analyzing whether using the decathlon results could solve the problem than needed. 
+
+#### What would you like to work on next week?
+
+* prepare meta labels from decathlon results, and train the meta learner
+* continue on chaos challenge algorithm
+* discuss next steps for the chaos challenge with Ishaan/Britt/Colin. (i.e. implementation of ensemble, use of bagging, etc)
+
+#### Where do you need help from Veronika?
+
+* is using the decathlon results as meta labels a good approach?
+
+### Date: 05-02-2019
+
+#### What did you achieve?
+
 * implement meta learning framework we discussed last week (results probably next week)
 * Defined the meta learning model more precise
 * Background reading on data visualisation 
