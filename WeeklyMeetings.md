@@ -1,6 +1,44 @@
 # Weekly meetings
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+
+# Weekly meetings
+
+Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+### Date: 05-02-2019
+
+#### Who helped you this week?
+
+* Helped Britt and Colin with the usage of Saruman
+* Helped Britt with setting up the online scrum board
+
+#### Who did you help this week?
+
+* Ishaan helped me with some issues I had with GitHub
+
+#### What did you achieve?
+
+* Found a reliable set of meta-features to use. it consists of 13 features, Table 1:( https://arxiv.org/ftp/arxiv/papers/1402/1402.0570.pdf ). 
+* Trained (an approximation of) the winning decathlon model on hte chaos CT data
+
+#### What did you struggle with?
+
+* figuring out how to extract the meta features from the decathlon data. (bv. what is the difference between class entropy and feature entropy and attribute entropy? the source paper didnt probide a lot of information)
+* not having enough time during the week to reach my goals. 
+
+#### What would you like to work on next week?
+
+* Finalize extracting the meta features and do the actual meta learning
+* Some new information about the chaos challenge was released. I want to plan the next coming weeks to ensure that our submission can be finished in time without our individual projects suffering near the submission date.  
+
+#### Where do you need help from Veronika?
+
+* do you think the current set of meta-features I want to use is good enough (both in size and types of features?)
+
+#### What are the agreements after this weekly meeting?
+
+* 
+
 ### Date: 05-02-2019
 
 #### What did you achieve?
