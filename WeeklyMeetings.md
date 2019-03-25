@@ -5,6 +5,36 @@ Copy/paste and fill in the template below each week, BEFORE coming to the weekly
 # Weekly meetings
 
 Copy/paste and fill in the template below each week, BEFORE coming to the weekly meeting with your supervisor. Put the newest weekly meeting first. 
+
+### Date: 25-03-2019
+
+#### Who helped you this week?
+
+* Britt helped me analyzing some of my results
+
+#### Who did you help this week?
+
+* I helped with organizing parts of the community day
+
+#### What did you achieve?
+
+* restructuring of code so it is easier to use and adapt to specific problems
+* further analysis on results from meta learning. Add new meta-features, add cross-validation
+* some work on the poster for ISBI (and the research day)
+
+#### What did you struggle with?
+
+* finding good data visualisations
+
+#### What would you like to work on next week?
+
+* Deciding whether I need to improve my meta features or my regression model, and then doing that :) 
+
+#### Where do you need help from Veronika?
+
+* Can you think of reasons why the regression is not working (even the training), except lack of quality and consistency of the meta features
+
+
 ### Date: 05-02-2019
 
 #### Who helped you this week?
