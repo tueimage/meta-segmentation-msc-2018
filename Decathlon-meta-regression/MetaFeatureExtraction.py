@@ -6,7 +6,7 @@ import itertools
 import cv2
 import random
 import os
-class MetaFeatureExatraction():
+class MetaFeatureExtraction():
     def __init__(self,task):
         # self.id = id
         self.task = task
