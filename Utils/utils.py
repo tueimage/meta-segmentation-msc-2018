@@ -13,6 +13,7 @@ from itertools import cycle
 from sklearn.manifold import TSNE
 import csv
 from scipy.stats import entropy as scipy_entropy
+from sklearn.decomposition import PCA
 def normalize(x):
     x = np.asarray(x)
     return (x - x.min()) / (np.ptp(x))
@@ -27,7 +28,68 @@ def correlation_coefficient(patch1, patch2):
     else:
         product /= stds
         return product
+def preprocess_metafeatures(metafeatures, tasks_list,sample_size):
+    nr_of_subsets = sample_size
+    nr_of_filters = metafeatures[tasks_list[0]].shape[2]
+    fmaps = np.zeros((len(tasks_list)*nr_of_subsets, nr_of_filters))
+    for fmap in tqdm(range(nr_of_filters)):
+        for i_id, i in enumerate(tasks_list):
+            for p in range(nr_of_subsets):
+                for j_id, j in enumerate(tasks_list):
+                    k = (metafeatures[i][p,:,fmap]>0)*1
+                    l = (metafeatures[j][p,:,fmap]>0)*1
+                    if np.count_nonzero(k) == 0 and np.count_nonzero(l) == 0:
+                        continue
+                    overlap = (49-np.sum(np.absolute(k-l)))/49
+                    if overlap>0.80 and i!=j:
+                        fmaps[i_id*nr_of_subsets+p,fmap]=1
+                        fmaps[j_id*nr_of_subsets+p,fmap]=1
+    usable_filters = np.zeros(nr_of_filters)
 
+    for f in range(nr_of_filters):
+        if np.count_nonzero(fmaps[:,nr_of_filters-f-1])==0:
+            usable_filters[nr_of_filters-f-1]=1
+            fmaps = np.delete(fmaps, nr_of_filters-f-1,axis=1)
+    new_metafeatures = np.zeros((len(tasks_list)*nr_of_subsets,np.count_nonzero(usable_filters)*49))
+    count = 0
+    for filter in np.nonzero(usable_filters)[0]:
+        for i_id, i in enumerate(tasks_list):
+            for p in range(nr_of_subsets):
+                new_metafeatures[i_id*nr_of_subsets + p, count*49:(count+1)*49] = metafeatures[i][p,:,filter]
+        count+=1
+    return new_metafeatures.astype(np.float64), fmaps.astype(np.float64), usable_filters
+def preprocess_metalabels(metalabels, tasks_list, sample_size):
+    nr_of_subsets = sample_size
+    new_metalabels = np.zeros((len(tasks_list)*nr_of_subsets,19))
+
+    for id, task in enumerate(tasks_list):
+        new_metalabels[id*nr_of_subsets:(id+1)*nr_of_subsets,:] =  (np.sum(metalabels[task], axis = 1)/metalabels[task].shape[1])[:sample_size,:]
+    return new_metalabels
+def preprocess_metafeatures_test_set(metafeatures, tasks_list,sample_size, usable_filters):
+    nr_of_subsets = sample_size
+    nr_of_filters = metafeatures[tasks_list[0]].shape[2]
+    fmaps = np.zeros((len(tasks_list[10:]), nr_of_filters))
+    for fmap in tqdm(range(nr_of_filters)):
+        for i_id, i in enumerate(tasks_list[:10]):
+            p = np.random.randint(0,nr_of_subsets-1)
+            for j_id, j in enumerate(tasks_list[10:]):
+                k = (metafeatures[i][p,:,fmap]>0)*1
+                l = (metafeatures[j][0,:,fmap]>0)*1
+                if np.count_nonzero(k) == 0 and np.count_nonzero(l) == 0:
+                    continue
+                overlap = (49-np.sum(np.absolute(k-l)))/49
+                if overlap>0.80 and i!=j:
+                    fmaps[0,fmap]=1
+    for f in range(nr_of_filters):
+        if usable_filters[nr_of_filters-f-1] == 1:
+            fmaps = np.delete(fmaps, nr_of_filters-f-1,axis=1)
+
+    new_metafeatures = np.zeros((1,np.count_nonzero(usable_filters)*49))
+    count = 0
+    for filter in np.nonzero(usable_filters)[0]:
+        new_metafeatures[0, count*49:(count+1)*49] = metafeatures[i][p,:,filter]
+        count+=1
+    return new_metafeatures.astype(np.float64), fmaps.astype(np.float64)
 def shannon_entropy(image, base=2):
     _, counts = np.unique(image, return_counts=True)
     return scipy_entropy(counts, base=base)
@@ -93,7 +155,7 @@ def makejpg(addresses, result_folder,task):
                 count+=1
 
 
-def generator(addresses, minibatch_size, imageDimensions):
+def fake_tune_generator(addresses, minibatch_size, imageDimensions):
      f = 1
      # Create empty arrays to contain batch of features and labels#
      batch_features = np.zeros((minibatch_size, imageDimensions[0],imageDimensions[1],3))
@@ -103,15 +165,17 @@ def generator(addresses, minibatch_size, imageDimensions):
             # choose random index in features
             index= random.choice(range(len(addresses)))
             im = cv2.imread(addresses[index])
-
-            label_address = addresses[index].replace("images", "labels")
-
-            label = cv2.imread(label_address, cv2.IMREAD_GRAYSCALE)
-            label = [x / 255 for x in label]
-            # print(im)
+            j=1
+            while np.std(im)==0:
+                im = cv2.imread(addresses[index-j])
+                j+=1
+                print("O_O")
+            im = (im-np.mean(im))/np.std(im)
+            label = np.zeros_like(im)
+            label[im>np.percentile(im,90)] = 1
             # print(im.shape)
             batch_features[i,:,:,:] = im
-            batch_labels[i,:,:,0] = label
+            batch_labels[i,:,:,0] = (np.average(label, axis = -1)>0).astype(np.uint8)
 
         yield batch_features, batch_labels
 def meta_generator_OM(addresses, labels, minibatch_size, imageDimensions):
@@ -148,95 +212,6 @@ def meta_pred_generator_OM(addresses, minibatch_size, imageDimensions):
 
 
         yield batch_features
-def visualize_meta_features(features, tasks_list, titles):
-    mean_and_std = np.zeros((len(tasks_list), len(features[tasks_list[0]][0]), 2))
-    for task in range(len(tasks_list)):
-        organized_features = np.zeros((len(features[tasks_list[task]]),len(features[tasks_list[task]][0])))
-        for meta_feature in range(len(features[tasks_list[task]])):
-            for i in range(len(features[tasks_list[task]][meta_feature])):
-                organized_features[meta_feature, i] = features[tasks_list[task]][meta_feature][i]
-        for i in range(len(features[tasks_list[task]][0])):
-            mean_and_std[task, i, 0] = np.mean(organized_features[:, i])
-            mean_and_std[task, i, 1] = np.std(organized_features[:, i])
-    for i in range(len(features[tasks_list[task]][0])):
-        sns.set_style('darkgrid')
-        sns.set_palette('muted')
-        sns.set_context("notebook", font_scale=1.5, rc={"lines.linewidth": 2.5})
-        fig, ax = plt.subplots()
-        ax.bar(np.arange(len(tasks_list)), mean_and_std[:,i,0], yerr=mean_and_std[:,i,1], align='center', alpha=0.5, ecolor='black', capsize=10)
-        ax.set_ylabel('Value [-]')
-        ax.set_xlabel('Dataset')
-        ax.tick_params(axis='both', which='major', labelsize=5)
-        ax.set_xticks([x - 0.5 for x in np.arange(len(tasks_list))])
-        ax.set_xticklabels(tasks_list, rotation = 45)
-        ax.set_title(titles[i])
-        ax.yaxis.grid(True)
-
-        # Save the figure and show
-        plt.tight_layout()
-        plt.savefig("graphs/meta_features/{}.png".format(titles[i]))
-def visualize_meta_labels(labels, tasks_list, titles):
-    mean_and_std = np.zeros((len(tasks_list), len(labels[tasks_list[0]][0]), 2))
-    for task in range(len(tasks_list)):
-        organized_labels = np.zeros((len(labels[tasks_list[task]]),len(labels[tasks_list[task]][0])))
-        for meta_label in range(len(labels[tasks_list[task]])):
-            for i in range(len(labels[tasks_list[task]][meta_label])):
-                organized_labels[meta_label, i] = labels[tasks_list[task]][meta_label][i]
-        for i in range(len(labels[tasks_list[task]][0])):
-            mean_and_std[task, i, 0] = np.mean(organized_labels[:, i])
-            mean_and_std[task, i, 1] = np.std(organized_labels[:, i])
-    for i in range(len(labels[tasks_list[task]][0])):
-        sns.set_style('darkgrid')
-        sns.set_palette('muted')
-        sns.set_context("notebook", font_scale=1.5, rc={"lines.linewidth": 2.5})
-        fig, ax = plt.subplots()
-        ax.bar(np.arange(len(tasks_list)), mean_and_std[:,i,0], yerr=mean_and_std[:,i,1], align='center', alpha=0.5, ecolor='black', capsize=10)
-        ax.set_ylabel('Dice coefficient')
-        ax.tick_params(axis='both', which='major', labelsize=5)
-        ax.set_xticks([x - 0.5 for x in np.arange(len(tasks_list))])
-        ax.set_xticklabels(np.arange(len(tasks_list)), rotation = 45)
-        ax.set_title(titles[i])
-        ax.yaxis.grid(True)
-
-        # Save the figure and show
-        plt.tight_layout()
-        plt.savefig("graphs/meta_labels/{}.png".format(titles[i]))
-def visualize_regression_one_method(gt, methods, methods_names):
-    # RS = 20150101
-    # sns.set_style('darkgrid')
-    # sns.set_palette('muted')
-    # sns.set_context("notebook", font_scale=1.5, rc={"lines.linewidth": 2.5})
-    x = np.arange(len(gt))
-    order = np.argsort(gt)
-    # gt.sort()
-    # plt.bar(x-0.3, gt, width = 0.5)
-    plt.plot(x, gt)
-    count = 0
-
-
-
-
-    for method in methods:
-        nMethod = np.array(method)[order]
-        # plt.bar(x+0.2*count, nMethod, width = 0.2)
-        plt.plot(x, method)
-        count+=1
-    legend_names = ['y'] + methods_names
-    plt.legend(legend_names, loc='upper left')
-    plt.savefig('graphs/lineNotOrdered.png')
-def joined_tSNE_plot(features_list):
-    RS = 20150101
-    sns.set_style('darkgrid')
-    sns.set_palette('muted')
-    sns.set_context("notebook", font_scale=1.5, rc={"lines.linewidth": 2.5})
-    plt.figure(1)
-    cycol = cycle('bgrcmk')
-    for sample in range(features_list.shape[0]):
-        feature = features_list[sample,:,:,:].reshape([2048,49])
-        tsne_variable = TSNE(random_state = RS).fit_transform(feature)
-        plt.scatter(tsne_variable[:,0], tsne_variable[:,1], c = next(cycol))
-        plt.errorbar(np.mean(tsne_variable[:,0]), np.mean(tsne_variable[:,1]), np.std(tsne_variable[:,0]), np.std(tsne_variable[:,1]), c= next(cycol) )
-        plt.savefig("testColon.png")
 def historyPlot(history, name):
     sns.set_style('darkgrid')
     sns.set_palette('muted')
@@ -278,7 +253,12 @@ def historyPlot(history, name):
     plt.legend(['train', 'valid'], loc='upper left')
     plt.tight_layout()
     plt.savefig("{}.png".format(name))
+
+
 def create_data_subsets(addresses, size):
+    """
+    create random subsets
+    """
     new_addresses = []
     indices = list(range(len(addresses)))
     random.shuffle(indices, random.random)
@@ -288,7 +268,9 @@ def create_data_subsets(addresses, size):
         new_addresses.append(addresses[index])
     return new_addresses
 def read_decathlon_data():
-
+    """
+    convert csv file to num[y array
+    """
 
     with open('/home/tjvsonsbeek/decathlonData/decathlon_csv.csv', 'r') as csvFile:
         reader = csv.reader(csvFile)
@@ -301,6 +283,9 @@ def read_decathlon_data():
     csvFile.close()
 
 def get_metalabels_decathlon():
+    """
+    convert excel file with decathlon results to numpy arrays containing the results
+    """
     dataset_xlsx = ['braintumor', 'heart', 'liver', 'hippocampus', 'prostate', 'lung', 'pancreas', 'hepaticvessel', 'spleen', 'colon']
     dataset      = ['Task01_BrainTumour','Task02_Heart','Task03_Liver','Task04_Hippocampus', 'Task05_Prostate', 'Task06_Lung', 'Task07_Pancreas', 'Task08_HepaticVessel', 'Task09_Spleen', 'Task10_Colon']
     participants = ['BCVuniandes', 'beomheep', 'CerebriuDIKU', 'EdwardMa12593', 'ildoo', 'iorism82', 'isarasua', 'Isensee', 'jiafucang', 'lesswire1', 'lupin', 'oldrich.kodym', 'ORippler', 'phil666', 'rzchen_xmu', 'ubilearn', 'whale', '17111010008', 'allan.kim01']

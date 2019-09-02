@@ -68,24 +68,24 @@ class Data():
     #     for i in subset_indices:
     #         self.meta_test_data.append(self.test_data[i])
 
-    def load_training_data(self):
-        train_addresses = os.listdir('/home/tjvsonsbeek/decathlonData/{}/imagesTr'.format(self.task))
-        for address in train_addresses:
-            self.train_data.append('/home/tjvsonsbeek/decathlonData/{}/imagesTr/{}'.format(self.task, address))
-    def load_training_labels(self):
-        for address in range(len(self.train_data)):
-            nr = self.train_data[address[-10:-7]]
-            if nr[0] == '_':
-                nr = nr[1:]
-            train_data = list(np.load('/home/tjvsonsbeek/featureExtractorUnet/decathlonMetaLabels/{}/{}.npy'.format(self.task, nr)))
-            self.train_data[address] = [self.train_data[address], labels]
-    def load_valid_data(self):
-        self.valid_data = self.train_data[np.ceil(len(self.train_data)*0.75):]
-        self.train_data = self.train_data[:np.ceil(len(self.train_data)*0.75)]
-    def load_test_data(self):
-        test_addresses = os.listdir('/home/tjvsonsbeek/decathlonData/{}/imagesTs'.format(self.task))
-        for address in test_addresses:
-            self.train_data.append('/home/tjvsonsbeek/decathlonData/{}/imagesTs/{}'.format(self.task,address))
+    # def load_training_data(self):
+    #     train_addresses = os.listdir('/home/tjvsonsbeek/decathlonData/{}/imagesTr'.format(self.task))
+    #     for address in train_addresses:
+    #         self.train_data.append('/home/tjvsonsbeek/decathlonData/{}/imagesTr/{}'.format(self.task, address))
+    # def load_training_labels(self):
+    #     for address in range(len(self.train_data)):
+    #         nr = self.train_data[address[-10:-7]]
+    #         if nr[0] == '_':
+    #             nr = nr[1:]
+    #         train_data = list(np.load('/home/tjvsonsbeek/featureExtractorUnet/decathlonMetaLabels/{}/{}.npy'.format(self.task, nr)))
+    #         self.train_data[address] = [self.train_data[address], labels]
+    # def load_valid_data(self):
+    #     self.valid_data = self.train_data[np.ceil(len(self.train_data)*0.75):]
+    #     self.train_data = self.train_data[:np.ceil(len(self.train_data)*0.75)]
+    # def load_test_data(self):
+    #     test_addresses = os.listdir('/home/tjvsonsbeek/decathlonData/{}/imagesTs'.format(self.task))
+    #     for address in test_addresses:
+    #         self.train_data.append('/home/tjvsonsbeek/decathlonData/{}/imagesTs/{}'.format(self.task,address))
 ['braintumour', 'heart', 'liver', 'hippocampus', 'prostate', 'lung', 'pancreas', 'spleen', 'colon']
 
 ['BCVuniandes', 'beomheep', 'CerebriuDIKU', 'EdwardMa12593', 'ildoo', 'iorism82', 'isarasua', 'Isensee', 'jiafucang', 'lesswire1', 'lupin', 'oldrich.kodym', 'ORippler', 'phil666', 'rzchen_xmu', 'ubilearn', 'whale', '17111010008', 'allan.kim01']
