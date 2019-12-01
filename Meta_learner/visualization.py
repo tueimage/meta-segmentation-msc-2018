@@ -7,7 +7,10 @@ import keras.backend as K
 import scipy.misc
 import seaborn as sns
 from itertools import cycle
+from sklearn.manifold import TSNE
 import csv
+from scipy.stats import entropy as scipy_entropy
+from scipy.spatial import distance
 from sklearn.decomposition import PCA
 from sklearn.manifold import MDS
 
@@ -123,32 +126,7 @@ def export_legend(legend, filename="graphs/legend.pdf"):
     bbox  = legend.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
     fig.savefig(filename, dpi="figure", bbox_inches=bbox)
 
-def results_scatterplot(pred, gt_labels, fe, ptcpt, regr = 'SVR')
-        colors  = ['b','slategray','r','m','c','k','lime','indigo','gold','peru']
-        fig = plt.figure()
-        ax = plt.gca()
-        plt.plot([0,1],[0,1])
-        plt.title(feature_extractors[fe_id],fontsize=20)
-        plt.xlim(0,1)
-        plt.ylim(0,1)
-        plt.xlabel('True model result', fontsize = 20)
-        plt.ylabel('Predicted model result', fontsize = 20)
-        plt.xticks(fontsize = 16)
-        plt.yticks(fontsize = 16)
-
-        legend_names = ['x = y']
-        for task_id, task in enumerate(tasks_list):
-            plt.errorbar(gt_labels[task_id,0,4],pred[task_id,0,4], xerr=gt_labels[task_id,1,4], yerr=pred[task_id,1,4], capsize = 4 ,fmt='o', c = colors[task_id])
-
-            legend_names.append(graph_tasks[task_id])
-
-#        plt.legend(legend_names)
-        plt.tight_layout()
-        plt.show()
-
-        plt.savefig('{}}_result_{}_participant_{}.pdf'.format(regr, fe, ptcpt))
-    ...
-def visualize_features_tSNE(features, datasets, current_datasets, fe,legend):
+def visualize_features_tSNE(features, datasets, current_datasets, name, fe,legend):
     RS = 20150101
     markers = ['1','s','p','h','+','x','*','d','o','<','x','*','+']
     colors  = ['b','slategray','r','m','c','k','lime','indigo','gold','peru','k','k','k']
@@ -178,12 +156,15 @@ def visualize_features_tSNE(features, datasets, current_datasets, fe,legend):
     plt.grid(True)
     plt.xlabel('Component 1', fontsize = 22)
     plt.ylabel('Component 2', fontsize = 22)
-
-
+    if fe == 'STAT':
+        plt.title('Statistical', fontsize = 28)
+    else:
+        plt.title(fe, fontsize = 28)
+    plt.tight_layout()
     # plt.title('t-SNE embedding of statistical and task specific meta features', fontsize = 12)
-    plt.savefig('graphs/tSNE/tSNEplot_{}.png'.format(fe),bbox_inches='tight')
+    plt.savefig('graphs/tSNE/tSNEplot_{}.png'.format(name),bbox_inches='tight')
 
-def visualize_features_MDS(features, datasets, current_datasets, fe,legend):
+def visualize_features_MDS(features, datasets, current_datasets, name, fe,legend):
     markers = ['1','s','p','h','+','x','*','d','o','<','x','*','+']
     colors  = ['b','slategray','r','m','c','k','lime','indigo','gold','peru','k','k','k']
     mds = MDS(n_components=2)
@@ -213,11 +194,15 @@ def visualize_features_MDS(features, datasets, current_datasets, fe,legend):
 
     if legend:
         plotted_legend = plt.legend(legend_names, framealpha=1, frameon=False)
-
+    if fe == 'STAT':
+        plt.title('Statistical', fontsize = 28)
+    else:
+        plt.title(fe, fontsize = 28)
     plt.xlabel('Component 1', fontsize = 20)
     plt.ylabel('Component 2', fontsize = 20)
+    plt.tight_layout()
     # plt.title('MDS embedding of statistical and task specific meta features', fontsize = 12)
-    plt.savefig('graphs/MDS/MDSplot_{}.png'.format(fe),bbox_inches='tight')
+    plt.savefig('graphs/MDS/MDSplot_{}.png'.format(name),bbox_inches='tight')
 
 def visualize_confusion_matrix(labels, datasets, fe,legend):
 
@@ -255,7 +240,7 @@ def visualize_confusion_matrix(labels, datasets, fe,legend):
     datasets_reverse.reverse()
     plt.xticks(list(range(50,1050,100)), datasets_reverse, rotation=20, ha = 'right', fontsize = 11)
     fig.savefig('graphs/gridMaps/gridMap_{}.pdf'.format(fe),bbox_inches='tight')
-def visualize_features_PCA(features, datasets, current_datasets, fe,legend):
+def visualize_features_PCA(features, datasets, current_datasets, name, fe,legend):
     markers = ['1','s','p','h','+','x','*','d','o','<','x','*','+']
     colors  = ['b','slategray','r','m','c','k','lime','indigo','gold','peru','k','k','k']
 
@@ -284,9 +269,13 @@ def visualize_features_PCA(features, datasets, current_datasets, fe,legend):
         legend = plt.legend(legend_names, framealpha=1, frameon=False)
     plt.xlabel('Component 1',fontsize = 25)
     plt.ylabel('Component 2',fontsize = 25)
+    if fe == 'STAT':
+        plt.title('Statistical', fontsize = 28)
+    else:
+        plt.title(fe, fontsize = 28)
     plt.tight_layout()
     # plt.title("PCA embedding of statistical and task specific meta features", fontsize = 12)
-    plt.savefig('graphs/PCA/PCAplot_{}.png'.format(fe),bbox_inches='tight')
+    plt.savefig('graphs/PCA/PCAplot_{}.png'.format(name),bbox_inches='tight')
 def pca_plot(features, labels, name = '', feature = '', cropped = False):
     pca = PCA(2)  # project from 64 to 2 dimensions
     projected = pca.fit_transform(features)

@@ -1,57 +1,37 @@
-from sklearn.decomposition import PCA
-from sklearn.manifold import MDS
-from utils import preprocess_metalabels, preprocess_metafeatures, preprocess_metafeatures_test_set, regression_feature_selection, largest_indices
-from visualization import visualize_meta_labels, visualize_meta_features, visualize_regression_result, visualize_features_tSNE, visualize_features_MDS, visualize_confusion_matrix, visualize_features_PCA, visualize_overall_result
-from keras.optimizers import Adam
-from MetaFeatureExtraction import MetaFeatureExtraction
+from meta_learner_utils import feature_selection, dnn_model, reset_weights, feature_selection_test_set, task_specific_features, normalize_metafeatures, add_task_specific_metafeatures, preprocess_metalabels, preprocess_metafeatures, preprocess_metafeatures_test_set, regression_feature_selection, largest_indices
+from visualization import visualize_features_tSNE, visualize_features_MDS, visualize_confusion_matrix, visualize_features_PCA
+from medical_metafeatures.feature_extraction import MetaFeatureExtraction
 from tqdm import tqdm
-import random
-import math
 import os
 import numpy as np
-from sklearn.metrics import mean_absolute_error, mean_squared_error
-from sklearn.feature_selection import f_regression, mutual_info_regression
-from sklearn.linear_model import LinearRegression, SGDRegressor, BayesianRidge, Ridge, LogisticRegression
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.neural_network import MLPRegressor
-from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.isotonic import IsotonicRegression
-from sklearn.svm import SVC
 from sklearn.svm import SVR
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.multioutput import MultiOutputRegressor
-from sklearn.ensemble import GradientBoostingRegressor
-import matplotlib.pyplot as plt
-import tensorflow as tf
-import keras
 import keras.backend as K
-from keras.models import Sequential
-from keras.layers import Dense,Input,Dropout
+import matplotlib.pyplot as plt
+from sklearn.metrics import mean_absolute_error
+from scipy.stats import spearmanr
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-np.random.seed(42)
+
 
 def main():
     tasks_list=  ['Task01_BrainTumour','Task02_Heart','Task03_Liver','Task04_Hippocampus', 'Task05_Prostate', 'Task06_Lung', 'Task07_Pancreas', 'Task08_HepaticVessel', 'Task09_Spleen', 'Task10_Colon','Task11_CHAOSLiver', 'Task12_LITSLiver','Task13_ACDCHeart']
-
     participants = ['BCVuniandes', 'beomheep', 'CerebriuDIKU', 'EdwardMa12593', 'ildoo', 'iorism82', 'isarasua', 'Isensee', 'jiafucang', 'lesswire1', 'lupin', 'oldrich.kodym', 'ORippler', 'phil666', 'rzchen_xmu', 'ubilearn', 'whale', '17111010008', 'allan.kim01']
-    nr_of_methods = len(participants)
+
+    nr_of_methods = 19
     feature_extractors = ['STAT','VGG16','ResNet50','MobileNetV1']
-    regression_method = ['SVR','DNN']
+    regression_methods = ['SVR','DNN']
     best_frac = {'STAT': 0.37,'VGG16': 0.23,'ResNet50': 0.49,'MobileNetV1': 0.49}
     meta_subset_size = 20
     sample_size = 100
     visualization = False
+    do_feature_selection = True
     gt_labels = np.load('metadata/decathlon_avgstd_results.npy')
-
 # load the meta_features and load_meta_labels
     meta_features = {}
     meta_labels   = {}
     for fe_id, fe in enumerate(feature_extractors):
         pred = np.zeros((len(feature_extractors), len(regression_methods), len(tasks_list[:10]),2,19))
-        result = np.zeros((len(feature_extractors), len(regression_methods), len(tasks_list[:10]),3))
-        result = np.zeros((len(feature_extractors), len(regression_methods), nr_of_methods,3))
+        results_task = np.zeros((len(feature_extractors), len(regression_methods), len(tasks_list[:10]),3))
+        results_method = np.zeros((len(feature_extractors), nr_of_methods, len(tasks_list[:10]),3))
         print(fe)
         for task_id, task in enumerate(tasks_list):
 
@@ -65,7 +45,6 @@ def main():
         if fe == 'STAT':
             regression_features_raw = np.zeros((len(tasks_list[:10])*sample_size, 38))
             regression_labels   = np.zeros((len(tasks_list[:10])*sample_size, 19))
-            regression_features_raw_test_set = np.zeros((len(tasks_list[10:]), 38))
 
             for task_id, task in enumerate(tasks_list[:10]):
                     for nr in range(sample_size):
@@ -84,13 +63,13 @@ def main():
 
             regression_features_raw = add_task_specific_metafeatures(regression_features_raw, task_specific_features, tasks_list[:10], sample_size)
 
-        regression_features_raw =  normalize_metafeatures(regression_features_raw)
+        regression_features =  normalize_metafeatures(regression_features_raw)
 
 
 
 
         for task_id, task in tqdm(enumerate(tasks_list[:10])):
-                nr_of_metafeatures = regression_features2.shape[1]
+                nr_of_metafeatures = regression_features.shape[1]
                 test_set = [task_id]
                 train_set = list(set(range(10))-set(test_set))
 
@@ -116,14 +95,13 @@ def main():
                     test_regression_labels[i*sample_size:(i+1)*sample_size,:] = regression_labels[task*sample_size:(task+1)*sample_size,:]
 
                 if do_feature_selection:
-                    train_regression_features, features_to_keep = feature_selection(train_regression_features, train_regression_labels, frac)
+                    train_regression_features, features_to_keep = feature_selection(train_regression_features, train_regression_labels, best_frac[fe_id])
                     test_regression_features = feature_selection_test_set(test_regression_features, features_to_keep)
-
                 for reg_id, regression_method in enumerate(regression_methods):
                     for p in range(19):
                         if regression_method == 'DNN':
                             K.clear_session()
-                            model = simple_single_model(train_regression_features.shape[1])
+                            model = dnn_model(train_regression_features.shape[1])
                             np.random.seed(42)
                             np.random.shuffle(train_regression_features)
                             np.random.seed(42)
@@ -141,18 +119,22 @@ def main():
 
                         pred[fe_id, reg_id, task_id,0,p] = np.mean(test_result)
                         pred[fe_id, reg_id, task_id,1,p] = np.std(test_result)
+        for reg_id, reg in enumerate(regression_methods):
+            for p_id, p in enumerate(participants):
                 # MAE
-                result_method[fe_id, res_id, task_id,0] = mean_absolute_error(gt_labels[task_id, 0, :],pred[task_id, 0, :])
-                # Spearman task rank
-                temp_gt, temp_pred = zip(*sorted(zip(gt_labels[task_id,0,:], pred)))
-                results_per_mthd[fe_id, reg_id, task_id, c_id, 3] = np.round(spearmanr(temp_gt, temp_pred)[0],2)
-                result_method[fe_id, res_id, task_id,1] = np.std(gt_labels[task_id, 0, :],pred[task_id, 0, :])
-                result_method[fe_id, res_id, task_id,1] = mean_absolute_error(gt_labels[task_id, 0, :],pred[task_id, 0, :])
-        # print(np.mean(res))
-        result[frac_id,:,:,:] = pred
-        print('Decathlon')
+                results_method[fe_id, reg_id, p_id,0] = mean_absolute_error(gt_labels[:, 0, p_id],pred[fe_id, reg_id, :,  0, p_id])
+                #spearman rank
+                temp_gt, temp_pred = zip(*sorted(zip(gt_labels[:,0, p_id], pred[fe_id, reg_id, :,  0, p_id])))
+                results_method[fe_id, reg_id, p_id,1] = np.round(spearmanr(temp_gt, temp_pred)[0],2)
+            for task_id, task in tqdm(enumerate(tasks_list[:10])): 
+                # MAE
+                results_task[fe_id, reg_id, task_id,0] = mean_absolute_error(gt_labels[task_id, 0, :],pred[fe_id, reg_id, task_id, 0, :])
+                #spearman rank
+                temp_gt, temp_pred = zip(*sorted(zip(gt_labels[task_id,0,:], pred[fe_id, reg_id,  0, :])))
+                results_task[fe_id, reg_id, task_id,1] = np.round(spearmanr(temp_gt, temp_pred)[0],2)
+    
 
-
-
+    np.save('output/crossval_results_task.npy', results_task)
+    np.save('output/crossval_results_method.npy', results_method)
 if __name__ == '__main__':
     main()
