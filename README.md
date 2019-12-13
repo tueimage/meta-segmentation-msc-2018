@@ -10,4 +10,5 @@ In medical image analysis deep learning has led to state-of-the-art results for 
 
 A possible solution to choosing a model is meta-learning, a learning method in which prior performance of a model is used to predict the performance for new tasks. Until now, metalearning has been primarily used for standard machine learning datasets, and is relatively unknown in medical imaging. We investigate metalearning for segmentation across 10 datasets of different organs and modalities. We propose four ways to summarize each dataset into metafeatures; compressed representations dataset used for learning the relationship between dataset and model performance. One of these metafeatures is based on statistical features of the images and three based on deep learning representations. Using support vector regression and a deep neural network the relationship between the metafeatures and prior model performance is learnt. On test datasets these methods yielded results between 0.10 from the true Dice score of model, indicating that meta-learning can be of value in medical imaging. 
 
+test
 
